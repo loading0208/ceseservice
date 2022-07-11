@@ -1,0 +1,198 @@
+{% extends 'main/maindashboard.html' %}
+
+
+{% block menu %}
+{% if session['level'] == 'admin' %}
+<li class="text-center p-20 upgrade-btn">
+  <a type="button" class="btn d-grid btn-danger text-white" data-bs-toggle="modal" data-bs-target="#addcontact" data-bs-whatever="@getbootstrap">เพื่มพนักงาน</a>
+</li>
+
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="page-breadcrumb bg-white">
+    <div class="row align-items-center">
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h3 class="page-title">Contact List</h3>
+      </div>
+      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="d-md-flex">
+          <ol class="breadcrumb ms-auto">
+            <li><a href="#" class="fw-normal"></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+
+  <div class="container-fluid">
+    <div class="row" style="background-color: white;padding:10px 0 10px 0">
+      <div class="col-md-12">
+        <table id="contact" class="table table-bordered table-striped">
+          <thead style="background-color:#74b9ff;color:black;text-align:center">
+            <tr>
+              <th scope="col">ชื่อ-นามสกุล</th>
+              <th scope="col">แผนก</th>
+              <th scope="col">เบอร์โทรศัพท์</th>
+              <th scope="col">E-Mail</th>
+              <th scope="col">เบอร์โต๊ะ</th>
+              {% if session['level'] == 'admin' %}
+              <th scope="col">การจัดการ</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for contact in contact %}
+            <tr>
+              <td>{{ contact.1 }}</td>
+              <td>{{ contact.6 }}</td>
+              <td>{{ contact.3 }}</td>
+              <td>{{ contact.4 }}</td>
+              <td>{{ contact.5 }}</td>
+              {% if session['level'] == 'admin' %}
+              <td>
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editcontact{{contact.0}}" data-bs-whatever="@getbootstrap"><span class=" fa fa-edit" style="color:white"></span></button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#dcontact{{contact.0}}" data-bs-whatever="@getbootstrap"><span class=" fa fa-trash-alt" style="color:white"></span></button>
+              </td>
+              {% endif %}
+              <!-- edit contact-->
+              <div class="modal fade" id="editcontact{{contact.0}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">แก้ไขข้อมูล</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{{ url_for('contact.Editcontact') }}" method="POST">
+                        <div class="form-group" hidden>
+                          <label for="recipient-name" class="col-form-label">ID:</label>
+                          <input class="form-control" value="{{contact.0}}" name="id">
+                        </div>
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">ชื่อ-นามสกุล:</label>
+                          <input type="text" class="form-control" value="{{contact.1}}" name="name" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">ตำแหน่ง:</label>
+                          <input type="text" class="form-control" value="{{contact.2}}" name="position">
+                        </div>
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">แผนก:</label>
+                          <select class="custom-select" name="Dpart" style="width:50%;border:0.5px solid rgba(0 ,0 ,0 ,0.1); border-radius:5px;height:2rem;padding:6px 28px 6px 12px;display:block" required>
+                            <option>---ระบุแผนก---</option>
+                            {% for dep in dep %}
+                            <option value="{{dep.1}}" name="Dpart">{{dep.1}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">เบอร์โทรศัพท์:</label>
+                          <input type="text" class="form-control" value="{{contact.3}}" name="tel">
+                        </div>
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">E-Mail:</label>
+                          <input type="text" class="form-control" value="{{contact.4}}" name="email">
+                        </div>
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">เบอร์ติดต่อภายใน:</label>
+                          <input type="text" class="form-control" value="{{contact.5}}" name="ext">
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-primary">แก้ไข</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--end edit contact-->
+
+              <!--deletecontact-->
+              <div class="modal fade" id="dcontact{{contact.0}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">ต้องการลบใช่หรือไม่</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{{ url_for('contact.Deletecontact') }}" method="POST">
+                        <div class="form-group" hidden>
+                          <label for="recipient-name" class="col-form-label">id:</label>
+                          <input class="form-control" value="{{contact.0}}" name="id">
+                        </div>
+                        <div class="form-group">
+                          <h3>{{contact.1}}</h3>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-danger"><span class=" fa fa-trash-alt" style="color:white"></span></button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- end deletecontact-->
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--add contact-->
+<div class="modal fade" id="addcontact" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">เพื่มพนักงาน</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url_for('contact.Addcontact') }}" method="POST">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">ชื่อ-นามสกุล:</label>
+            <input type="text" class="form-control" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">ตำแหน่ง:</label>
+            <input type="text" class="form-control" name="position">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">เบอร์โทรศัพท์:</label>
+            <input type="text" class="form-control" name="tel">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">E-Mail:</label>
+            <input type="text" class="form-control" name="email">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">เบอร์ติดต่อภายใน:</label>
+            <input type="text" class="form-control" name="ext">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">แผนก:</label>
+            <select class="custom-select" name="Dpart" style="width:50%;border:0.5px solid rgba(0 ,0 ,0 ,0.1); border-radius:5px;height:2rem;padding:6px 28px 6px 12px;display:block" required>
+              <option>---ระบุแผนก---</option>
+              {% for dep in dep %}
+              <option value="{{dep.1}}" name="Dpart">{{dep.1}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">เพื่ม</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end addcontact-->
+
+{% endblock %}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" type="image/png" href="static/img/Logo.png">
+  <title>IT Support| Registration</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="static/registration/css/regis.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="static/registration/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="static/registration/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="static/registration/dist/css/adminlte.min.css">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+</head>
+
+<body class="hold-transition register-page background-body">
+  <div class="register-box">
+    <div class="card">
+      <div class="register-logo" style="margin:10px,">
+        <img src="static\registration\img\IT Support.jpg" alt="" width="100%">
+      </div>
+      <div class="card-body register-card-body">
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="alert alert-danger">
+          <div class="container">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true"><i class="material-icons">X</i></span>
+            </button>
+            <b>Error Alert:</b> {{msg}}
+          </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form action="{{url_for('user.Regisuser')}}" method="POST">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="fname" placeholder="First name" required>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-users"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="lname" placeholder="Last name" required>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-users"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <select class="custom-select" name="depart" required>
+              <option value="" name="depart">----Please Select Department---</option>
+              {% for dep in dep %}
+              <option value="{{dep.1}}" name="depart">{{dep.1}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" name="email" placeholder="E-Mail" required>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-at"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3" hidden>
+            <select class="custom-select" name="level" required>
+              <option value="สมาชิกทั่วไป" name="depart">สมาชิกทั่วไป</option>
+              <option value="admin" name="depart">Admin</option>
+            </select>
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="username" pattern="^[a-zA-Z\s]+$" placeholder="Username (เฉพาะ a-z, A-Z)" required>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-user"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" name="password" pattern="^[a-zA-Z0-9\s]+$" placeholder="Password (เฉพาะ a-z, A-Z, 0-9)">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" name="repassword" placeholder="Retype password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-8">
+              <div class="icheck-primary">
+                <input type="checkbox" id="agreeTerms" name="terms" value="agree" required>
+                <label for="agreeTerms">
+                  I agree to the <a data-toggle="modal" data-target=".bd-example-modal-sm" style="color:blue;">terms</a>
+
+                </label>
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-4">
+              <button type="submit" class="btn btn-primary btn-block">Register</button>
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
+
+
+        <a href="/login" class="text-center" style="color:#3498DB">I already have a membership</a>
+      </div>
+      <!-- /.form-box -->
+    </div><!-- /.card -->
+    <!--model-->
+    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <h5>
+            <center style="padding:10px 0 0 0;">
+              เงื่อนไขการเข้าใช้งานระบบ
+            </center>
+            <div class="modal-content" style="font-size:15px;">
+              <br>
+              <p style="margin:10px">
+                1.การสมัครสามาชิกต้องไส่ข้อมูลที่เป็นจริง
+                2.ต้องใช้ ID ตัวเองทุกครั้งเมื่อต้องการเข้าระบบ <br>
+                3.ต้องไส่ข้อมูลที่เป็นทุกครั้งเมื่อมีการแจ้งซ่อม
+              </p>
+            </div>
+          </h5>
+        </div>
+      </div>
+    </div>
+    <!--end-->
+  </div>
+  <!-- jQuery -->
+  <script src="static/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="static/dist/js/adminlte.min.js"></script>
+</body>
+
+</html>

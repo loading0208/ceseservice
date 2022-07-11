@@ -1,0 +1,70 @@
+{% extends 'main/mainlanding.html' %}
+
+{% block content %}
+
+<style>
+  .card {
+    margin-top: 10%;
+    -webkit-box-shadow: 0 30px 50px rgba(0, 0, 0, .2);
+    box-shadow: 0 30px 50px rgba(0, 0, 0, .2)
+  }
+
+  .card p {
+    font-size: 1.3rem;
+  }
+
+  .card-img img {
+    width: 100%;
+    margin-bottom: 5%
+  }
+
+  @media screen and (max-width:992px) {
+    .card {
+      margin-top: 20%;
+    }
+
+  }
+
+  @media screen and (max-width:769px) {
+    .card {
+      margin-top: 27% !important;
+    }
+  }
+
+  @media screen and (max-width:520px) {
+    .card {
+      margin-top: 30% !important;
+    }
+  }
+
+  @media screen and (max-width:480px) {
+    .card {
+      margin-top: 35% !important;
+    }
+  }
+</style>
+
+<div class="card">
+  <div class="card-body">
+    <div class="card-img">
+      <img src="static/imglanding/0006/1.jpg">
+    </div>
+
+    <div class="card-title">
+      <h2>Apple ปล่อยอัปเดต Firmware ให้กับ AirPods, AirPods Max และ AirPods Pro </h2>
+    </div>
+    <p>Apple ได้ปล่อยอัปเดต Firmware สำหรับหูฟังของตัวเองอย่าง AirPods ตั้งแต่ AirPods 2, AirPods Max และ AirPods Pro อย่างพร้อมเพรียงกันโดยประกอบ โดยทั้งหมดจะได้เลข Firmware รหัส 4E71</p>
+    <br>
+    <center><img src="static/imglanding/0006/2.jpg" alt="" style="width:100%"></center>
+    <br>
+    <p>ส่วน AirPods 3 นั้นไม่ได้รับการอัปเดตเพราะมีการอัปเดตเวอร์ชั่น 4C170 มาตั้งแต่เดือนมกราคมแล้ว สำหรับการอัปเดตครั้งนี้ไม่ได้เปิดเผยว่าแก้ไปัญหาอะไรบ้าง แต่คาดว่าจะแก้ปัญหาเรื่องความเสถียรและแก้ Bugs ภายในที่มีผู้ใช้งานพบมากกว่า</p>
+    <br>
+    <center>
+      <img src="static/imglanding/0006/3.jpg" alt="" style="width:100%">
+    </center><br><br>
+    <p>สำหรับการอัปเดตนั้นจะต้องใช้อุปกรณ์ของ Apple จะเป็น iOS, iPad OS ก็สามารถทำได้ โดยการเชื่อมต่อกับอุปกรณ์ แล้วเข้าไปที่ ตั้งค่า (Setting) > ทั่วไป (General) > About (เกี่ยวกับ) > AirPods จะขึ้นหมายเลข Firmware มาระบบจะอัปเดตเอง </p>
+    <br>
+
+  </div>
+</div>
+{% endblock %}

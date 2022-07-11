@@ -1,0 +1,68 @@
+{% extends 'main/mainlanding.html' %}
+
+{% block content %}
+
+<style>
+  .card {
+    margin-top: 10%;
+    -webkit-box-shadow: 0 30px 50px rgba(0, 0, 0, .2);
+    box-shadow: 0 30px 50px rgba(0, 0, 0, .2)
+  }
+
+  .card p {
+    font-size: 1.3rem;
+  }
+
+  .card-img img {
+    width: 100%;
+    margin-bottom: 5%
+  }
+
+  @media screen and (max-width:992px) {
+    .card {
+      margin-top: 20%;
+    }
+
+  }
+
+  @media screen and (max-width:769px) {
+    .card {
+      margin-top: 27% !important;
+    }
+  }
+
+  @media screen and (max-width:520px) {
+    .card {
+      margin-top: 30% !important;
+    }
+  }
+
+  @media screen and (max-width:480px) {
+    .card {
+      margin-top: 35% !important;
+    }
+  }
+</style>
+
+<div class="card">
+  <div class="card-body">
+    <div class="card-img">
+      <img src="static/imglanding/0003/20473_22050700042508.jpg">
+    </div>
+
+    <div class="card-title">
+      <h2>Google เตรียมเพิ่มฟีเจอร์ป้องกันการดาวน์โหลดแอปพลิเคชันแฝงมัลแวร์บน Android 13</h2>
+    </div>
+    <p>
+      ก่อนที่เราจะได้ใช้งาน Android 13 กันในช่วงเดือนกันยายนปีนี้ ล่าสุดก็ได้มีคนพบเห็นว่า Google ก็เพิ่มฟีเจอร์ตัวช่วย “ยกระดับความปลอดภัย” การใช้งานสมาร์ทโฟนของเราจากไวรัสและ Malware ต่าง ๆ เข้ามาบน Android 13 (เวอร์ชัน Beta)</p>
+    <br>
+    <p>โดยฟีเจอร์ที่จะเพิ่มเข้ามานี้มีชื่อว่า “TotallyLegitApp” หรือฟีเจอร์ป้องกันการ Sideload แอปพลิเคชันจากแหล่งอื่น ๆ อย่างการลงไฟล์ APK หรือการดาวน์โหลดแอปพลิเคชันจากลิงก์แนบในอีเมลหรือ SMS ที่อาจแฝงไวรัสหรือมัลแวร์ติดมากับตัวแอปพลิเคชัน
+      ซึ่งเมื่อผู้ใช้กดเปิดใช้งานฟีเจอร์ดังกล่าวและกดอนุญาตให้มันสแกนความปลอดภัยของการติดตั้งแอปพลิเคชันบนเครื่องเป็นที่เรียบร้อยมันก็จะทำการล็อกเครื่องให้สามารถดาวน์โหลดและติดตั้งแอปพลิเคชันได้จาก Google Play Store
+      หรือแหล่งดาวน์โหลดที่เชื่อถือได้อย่างเว็บไซต์ Official เท่านั้น</p>
+    <img src="static/imglanding/0003/20473_220507000050j5_104.jpg" alt="" style="width: 100%">
+    <p style="text-align:center;font-size:10px">ภาพจาก ภาพจาก : https://crast.net/49214/with-android-13-you-will-be-more-protected-against-malware-a-new-restriction-reaches-unknown-apps/</p><br>
+    <p>อย่างไรก็ตาม บน Android 13 (เวอร์ชัน Beta) นั้นก็พบว่าผู้ใช้สามารถกด Ignore การเตือนความปลอดภัยและเลือกยืนยันที่จะติดตั้งแอปพลิเคชันเถื่อนลงเครื่องได้ คาดว่าเราก็น่าจะต้องรอดูกันต่อไปว่าทาง Google จะปรับแก้ในส่วนนี้บน Android 13
+      เวอร์ชันเต็มหรือเปล่า (แต่สำหรับใครที่อยากจะปิดการทำงานของ TotallyLegitApp ก็สามารถเลือกกด “Uninstall” หรือ “Force Stop” ได้)
+  </div>
+</div>
+{% endblock %}

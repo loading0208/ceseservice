@@ -1,0 +1,65 @@
+{% extends 'main/mainlanding.html' %}
+
+{% block content %}
+
+<style>
+  .card {
+    margin-top: 10%;
+    -webkit-box-shadow: 0 30px 50px rgba(0, 0, 0, .2);
+    box-shadow: 0 30px 50px rgba(0, 0, 0, .2)
+  }
+
+  .card p {
+    font-size: 1.3rem;
+  }
+
+  .card-img img {
+    width: 100%;
+    margin-bottom: 5%
+  }
+
+  @media screen and (max-width:992px) {
+    .card {
+      margin-top: 20%;
+    }
+
+  }
+
+  @media screen and (max-width:769px) {
+    .card {
+      margin-top: 27% !important;
+    }
+  }
+
+  @media screen and (max-width:520px) {
+    .card {
+      margin-top: 30% !important;
+    }
+  }
+
+  @media screen and (max-width:480px) {
+    .card {
+      margin-top: 35% !important;
+    }
+  }
+</style>
+
+<div class="card">
+  <div class="card-body">
+    <div class="card-img">
+      <img src="static/imglanding/363636.jpg" height="600">
+    </div>
+
+    <div class="card-title">
+      <h2>ยกเลิกแล้ว Facebook หยุดเก็บข้อมูล ถอดฟีเจอร์ Nearby Friends</h2>
+    </div>
+    <p>Facebook ทยอยส่งข้อความอย่างเป็นทางการแจ้งผู้ใช้งานว่าจะหยุดให้บริการฟีเจอร์ Nearby Friends และ Weather Alerts ตั้งแต่วันที่ 31 พฤษภาคม 2022 นี้ เป็นต้นไป</p>
+    <br>
+    <p>ก่อนหน้านี้ทั้ง 2 ฟีเจอร์ถูกออกแบบมาเพื่อเก็บข้อมูลของผู้ใช้งานในแพลตฟอร์ม ทั้งข้อมูลส่วนตัว ประวัติตำแหน่ง รวมไปถึงการเดินทางไปยังสถานที่ต่าง ๆ เพื่อช่วยให้ระบบมีความแม่นยำที่สุด</p><br>
+
+    <p>เมื่อ Facebook ตัดสินใจยกเลิกการใช้งาน นั่นแปลว่าข้อมูลทั้งหมดทั้ง Location History และ Background Location ในระบบจะถูกลบออกไปด้วยเช่นกัน โดยผู้ใช้งานจะที่ได้รับข้อความแจ้งเตือน</p>
+    <p>ตอนนี้ทุกคนสามารถเข้าถึงและดูประวัติตำแหน่งของตัวเองทั้งหมดได้ โดยกดเข้าไปที่ “เข้าถึงตำแหน่งของคุณ” ได้จนถึงวันที่ 1 สิงหาคมนี้เท่านั้น ก่อนนี้ข้อมูลทั้งหมดจะถูกลบออกจากระบบ</p><br>
+    <p>อย่างไรก็ตาม แม้ผลกระทบของการยกเลิกฟีเจอร์ Nearby Friends และ Weather Alerts จะทำให้ถึงข้อมูลและตำแหน่งถูกลบออกไป แต่ทาง Facebook ก็ยังคงเดินหน้าว่า เก็บข้อมูล Location-Based โดยหวังว่าจะนำไปต่อยอดพัฒนาฟีเจอร์ใหม่ๆ ในอนาคต เข้ามาแทน</p><br>
+  </div>
+</div>
+{% endblock %}

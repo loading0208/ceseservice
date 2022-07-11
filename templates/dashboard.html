@@ -1,0 +1,604 @@
+{% extends 'main/maindashboard.html' %}
+
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="page-breadcrumb bg-white">
+    <div class="row align-items-center">
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Dashboard</h4>
+      </div>
+      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="d-md-flex">
+          <ol class="breadcrumb ms-auto">
+            <li></li>
+          </ol>
+          <a href="/pro" type="button" class="btn btn-dark  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">Load Pro</a>
+          <a type="button" class="btn btn-info  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white" data-bs-toggle="modal" data-bs-target="#report">Report</a>
+          <a type="button" class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white" data-bs-toggle="modal" data-bs-target="#adddepartment">เพื่มแผนก</a>
+        </div>
+      </div>
+    </div>
+    <!--Modal add department-->
+    <div class="modal fade" id="adddepartment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Department</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="{{ url_for('dashboard.Adddepartment') }}" method="POST">
+              <div class="adddepartment" style="display:flex">
+                <div class="mb-6" style="display:flex;flex-direction:column;align-items:right">
+                  <label for="recipient-name" class="col-form-label">Dep name:</label>
+                  <input type="text" class="form-control" id="recipient-name" name="inputdep">
+                  <button style="margin-top:15px" type="submit" class="btn btn-primary">เพื่ม</button>
+                </div>
+                <div class="mb-6" style="margin:0 0 0 50px">
+                  <label for="recipient-name" class="col-form-label"><u>
+                      <h3>All Department</h3>
+                    </u></label>
+                  {% for dep in dep %}
+                  <p>{{dep.1}}</p>
+                  {% endfor %}
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+    <!--End Modal add department-->
+    <!--model report-->
+    <div class="modal fade" id="report" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">ระบบรายงาน</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="{{ url_for('dashboard.Report') }}" method="POST">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">เดือน:</label>
+                <select class="custom-select" name="months" style="width:50%;border:0.5px solid rgba(0 ,0 ,0 ,0.1); border-radius:5px;height:2rem;padding:6px 28px 6px 12px">
+                  <option value="มกราคม">มกราคม</option>
+                  <option value="กุมภาพันธ์">กุมภาพันธ์</option>
+                  <option value="มีนาคม">มีนาคม</option>
+                  <option value="เมษายน">เมษายน</option>
+                  <option value="พฤษภาคม">พฤษภาคม</option>
+                  <option value="มิถุนายน">มิถุนายน</option>
+                  <option value="กรกฎาคม">กรกฎาคม</option>
+                  <option value="สิงหาคม">สิงหาคม</option>
+                  <option value="กันยายน">กันยายน</option>
+                  <option value="ตุลาคม">ตุลาคม</option>
+                  <option value="พฤษจิกายน">พฤษจิกายน</option>
+                  <option value="ธันวาคม">ธันวาคม</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">วันที่:</label>
+                <input type="datetime-local" class="form-control" name="dstart" required>
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">วันที่:</label>
+                <input type="datetime-local" class="form-control" name="dend" required>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Preview</button>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-3 col-md-12">
+        <div class="white-box analytics-info">
+          <a href="#newtabledesk">
+            <h3 class="box-title">แจ้งซ่อมใหม่</h3>
+          </a>
+          <ul class="list-inline two-part d-flex align-items-center mb-0">
+            <li class="ms-auto"><span class="counter text-success">{{tnewdesk}}</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-12">
+        <div class="white-box analytics-info">
+          <a href="#waittabledesk">
+            <h3 class="box-title">กำลังดำเนินการ</h3>
+          </a>
+
+          <ul class="list-inline two-part d-flex align-items-center mb-0">
+            <li class="ms-auto"><span class="counter text-purple">{{twaitdesk}}</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-12">
+        <div class="white-box analytics-info">
+          <a href="#bookingtabledesk">
+            <h3 class="box-title">จองห้องประชุม</h3>
+          </a>
+          <ul class="list-inline two-part d-flex align-items-center mb-0">
+            <li class="ms-auto"><span class="counter text-info">{{tbooking}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-12">
+        <div class="white-box analytics-info">
+          <a href="#newuser">
+            <h3 class="box-title">สมาชิกใหม่</h3>
+          </a>
+          <ul class="list-inline two-part d-flex align-items-center mb-0">
+            <li class="ms-auto"><span class="counter text-info">{{tnewuser}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--table new desk-->
+    {% if tnewdesk != 0 %}
+    <div class="row" style="background-color: white;padding:10px 0 10px 0">
+      <div class="col-md-12">
+        <h3>รายการแจ้งซ่อมใหม่</h3>
+        <table id="newtabledesk" class="table table-bordered table-striped">
+          <thead style="background-color:#74b9ff;color:black;text-align:center">
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">ชื่อ-นามสกุล</th>
+              <th scope="col">เบอร์โต๊ะ</th>
+              <th scope="col">อาการเสีย</th>
+              <th scope="col" style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for newdesk in newdesk %}
+            <tr>
+              <td class="noid">{{newdesk.0}}</td>
+              <td>{{newdesk.1}} {{newdesk.2}}</td>
+              <td>{{newdesk.15}}</td>
+              <td>{{newdesk.8}}</td>
+              <td class="btact">
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#newdesk{{newdesk.0}}" data-bs-whatever="@getbootstrap"><span class=" fas fa-eye"></span> </button>
+              </td>
+            </tr>
+
+            <div class="modal fade" id="newdesk{{newdesk.0}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">รายละเอียด</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="{{ url_for('dashboard.Ithelpdesk') }}" method="POST">
+                      <div class="form-group">
+                        <img src="{{newdesk.12}}" style="width:100%">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">No:</label>
+                        <input class="form-control" value="{{newdesk.0}}" name="id">
+                      </div>
+                      <input class="form-control" value="{{newdesk.1}}" name="nameuser" hidden>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">อาการเสีย:</label>
+                        <input type="text" class="form-control" style="background:none" value="{{newdesk.8}}" name="detail" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">สถานะ:</label>
+                        <input type="text" class="form-control" value="" name="feedback" required>
+                      </div>
+                      <div class="form-group" hidden>
+                        <label for="recipient-name" class="col-form-label">Date accept:</label>
+                        <input type="text" class="form-control" value="{{now}}" name="Dateaccept">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">ผู้ซ่อม:</label>
+                        <input type="text" class="form-control" value="{{ session['fname'] }}" name="ituser">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">การดำเนินการ:</label>
+                        <div class="col-md6">
+                          <select class="custom-select" name="jobstatus" style="width:50%;border:0.5px solid rgba(0 ,0 ,0 ,0.1); border-radius:5px;height:2rem;padding:6px 28px 6px 12px" required>
+                            <option value="" name="jobstatus">--เลือกการดำเนินการ--</option>
+                            <option value="2" name="jobstatus">รับงาน</option>
+                            <option value="3" name="jobstatus">ส่งงาน</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group" hidden>
+                        <label for="recipient-name" class="col-form-label">email:</label>
+                        <input type="email" class="form-control" value="{{newdesk.4}}" name="email">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" data-dismiss="modal"><span class=" fas fa-check" style="color:white"></span></button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    {% endif %}
+    <!--end table new desk-->
+    <!-- ============================================================== -->
+
+    <!-- ============================ waittabledesk ============================-->
+    {% if twaitdesk != 0 %}
+    <div class="row" style="background-color: white;padding:10px 0 10px 0;margin-top:50px">
+      <div class="col-md-12">
+        <h3>รอดำเนินการ</h3>
+        <table id="waittabledesk" class="table table-bordered table-striped">
+          <thead style="background-color:#ffeaa7;color:black;text-align:center">
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">ชื่อ-นามสกุล</th>
+              <th scope="col">เบอร์โต๊ะ</th>
+              <th scope="col">อาการเสีย</th>
+              <th scope="col">สถานะ</th>
+              <th scope="col" style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for waitdesk in waitdesk %}
+            <tr>
+              <td class="noid">{{waitdesk.0}}</td>
+              <td>{{waitdesk.1}} {{waitdesk.2}}</td>
+              <td>{{waitdesk.15}}</td>
+              <td>{{waitdesk.8}}</td>
+              <td>{{waitdesk.9}}</td>
+              <td class="btact">
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#waitdesk{{waitdesk.0}}" data-bs-whatever="@getbootstrap"><span class=" fas fa-eye"></span> </button>
+              </td>
+            </tr>
+
+            <div class="modal fade" id="waitdesk{{waitdesk.0}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="{{ url_for('dashboard.Ithelpdeskwait') }}" method="POST">
+                      <div class="form-group">
+                        <img src="{{waitdesk.12}}" style="width:100%">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">No:</label>
+                        <input class="form-control" value="{{waitdesk.0}}" name="id">
+                      </div>
+                      <input class="form-control" value="{{waitdesk.1}}" name="nameuser" hidden>
+                      <div class="form-group" hidden>
+                        <label for="recipient-name" class="col-form-label">อาการเสีย:</label>
+                        <input type="text" class="form-control" style="background:none" value="{{waitdesk.8}}" name="detail"  >
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">สถานะ:</label>
+                        <input type="text" class="form-control" name="report" required>
+                      </div>
+                      <div class="form-group" hidden>
+                        <label for="recipient-name" class="col-form-label">Date accept:</label>
+                        <input type="text" class="form-control" value="{{now}}" name="Dateaccept">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">ผู้ซ่อม:</label>
+                        <input type="text" class="form-control" value="{{ session['fname'] }}" name="ituser">
+                      </div>
+                      <div class="col-md6">
+                        <select class="custom-select" name="jobstatus" style="width:50%;border:0.5px solid rgba(0 ,0 ,0 ,0.1); border-radius:5px;height:2rem;padding:6px 28px 6px 12px" required>
+                          <option value="" name="jobstatus">--เลือกการดำเนินการ--</option>
+                          <option value="2" name="jobstatus">อัพเดท</option>
+                          <option value="3" name="jobstatus">ส่งงาน</option>
+                        </select>
+                      </div>
+                      <div class="form-group" hidden>
+                        <label for="recipient-name" class="col-form-label">mail:</label>
+                        <input type="email" class="form-control" value="{{waitdesk.4}}" name="email">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" data-dismiss="modal"><span class=" fas fa-check" style="color:white"></span></button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- ============================ waittabledesk end============================-->
+    {% else %}
+    {% endif %}
+
+    <!-- ============================ bookingroom table ============================-->
+    {% if tbooking != 0 %}
+    <div class="row" style="background-color: white;padding:10px 0 10px 0;margin-top:50px">
+      <div class="col-md-12">
+        <h3>รายการจองห้องประชุม</h3>
+        <table id="bookingtabledesk" class="table table-bordered table-striped">
+          <thead style="background-color:#ff9ff3;color:black;text-align:center">
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">ชื่อ-นามสกุล</th>
+              <th scope="col">แผนก</th>
+              <th scope="col">ห้อง</th>
+              <th>วันที่ต้องการใช้</th>
+              <th scope="col" style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for booking in booking %}
+            <tr>
+              <td class="noid">{{booking.0}}</td>
+              <td>{{booking.1}} {{booking.2}}</td>
+              <td>{{booking.3}}</td>
+              <td>{{booking.5}}</td>
+              <td>{{booking.6}} ==> {{booking.7}}</td>
+              <td class="btact">
+                {% if booking.9 == 0 or booking.9 == 10 or booking.9 == 20 %}
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#booking{{booking.0}}" data-bs-whatever="@getbootstrap"><span class="fas fa-eye" style="color:white"></span></button>
+                {% endif %}
+                {% if booking.9 == 2 or booking.9 == 12 or booking.9 == 22 %}
+                <!--ตรวจสอบปิดห้อง---->
+                <form class="" action="{{ url_for('booking.Updatestatus') }}" method="post">
+                  <input class="form-control" value="{{booking.0}}" name="id" hidden>
+                  <input type="text" class="form-control" value="{{booking.5}}" name="room" hidden>
+                  <input type="email" class="form-control" value="{{booking.4}}" name="email" hidden>
+                  <input type="text" class="form-control" value="{{ session['fname'] }}" name="admin" hidden>
+                  {% if booking.5 == "Malakul" %}
+                  <div class="form-group" hidden>
+                    <input type="text" class="form-control" value="4" name="status">
+                  </div>
+                  {% elif booking.5 == "Thanasriporn" %}
+                  <div class="form-group" hidden>
+                    <input type="text" class="form-control" value="14" name="status">
+                  </div>
+                  {% elif booking.5 == "Chadjew" %}
+                  <div class="form-group" hidden>
+                    <input type="text" class="form-control" value="24" name="status">
+                  </div>
+                  {% endif %}
+                  <button type="submit" class="btn btn-danger"><span class="far fa-window-close" style="color:white"></span></button>
+                </form>
+                <!---สิ้นสุดตรวจสอบปิดห้อง---->
+                {% endif %}
+              </td>
+            </tr>
+            <div class="modal fade" id="booking{{booking.0}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">รายละเอียดการจอง</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="{{ url_for('booking.Updatestatus') }}" method="POST">
+                      <input type="text" class="form-control" value="{{ session['fname'] }}" name="admin" hidden>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">id:</label>
+                        <input class="form-control" value="{{booking.0}}" name="id">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">ชื่อ:</label>
+                        <input type="text" class="form-control" value="{{booking.1}}" name="name">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">นามสกุล:</label>
+                        <input type="text" class="form-control" value="{{booking.2}}" name="lname">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">แผนก:</label>
+                        <input type="text" class="form-control" value="{{booking.3}}" name="department">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">E-mail:</label>
+                        <input type="email" class="form-control" value="{{ session['email'] }}" name="email">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">ห้อง:</label>
+                        <input type="text" class="form-control" value="{{booking.5}}" name="room">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">วันที่ใช้งาน:</label>
+                        <input type="text" class="form-control" value="{{booking.6}}">
+                      </div>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">ถึงวันที่:</label>
+                        <input type="text" class="form-control" value="{{booking.7}}">
+                      </div>
+                      {% if booking.5 == "Malakul" %}
+                      <div class="form-group" hidden>
+                        <label for="recipient-name" class="col-form-label">level:</label>
+                        <input type="text" class="form-control" value="1" name="status">
+                      </div>
+                      {% elif booking.5 == "Thanasriporn" %}
+                      <div class="form-group" hidden>
+                        <label for="recipient-name" class="col-form-label">level:</label>
+                        <input type="text" class="form-control" value="11" name="status">
+                      </div>
+                      {% elif booking.5 == "Chadjew" %}
+                      <div class="form-group" hidden>
+                        <label for="recipient-name" class="col-form-label">level:</label>
+                        <input type="text" class="form-control" value="21" name="status">
+                      </div>
+                      {% endif %}
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-success"><span class=" fas fa-check" style="color:white"></span></button>
+                    </form>
+                    <!--ไม่ให้ใช้งานห้องประชุม เนื่องจากไม่ว่าง--->
+                    <form class="" action="{{ url_for('booking.Updatestatus') }}" method="post">
+                      <input class="form-control" value="{{booking.0}}" name="id" hidden>
+                      <input type="text" class="form-control" value="{{booking.5}}" name="room" hidden>
+                      <input type="email" class="form-control" value="{{ session['email'] }}" name="email" hidden>
+                      <input type="text" class="form-control" value="{{ session['fname'] }}" name="admin" hidden>
+                      {% if booking.5 == "Malakul" %}
+                      <div class="form-group" hidden>
+                        <input type="text" class="form-control" value="3" name="status">
+                      </div>
+                      {% elif booking.5 == "Thanasriporn" %}
+                      <div class="form-group" hidden>
+                        <input type="text" class="form-control" value="13" name="status">
+                      </div>
+                      {% elif booking.5 == "Chadjew" %}
+                      <div class="form-group" hidden>
+                        <input type="text" class="form-control" value="23" name="status">
+                      </div>
+                      {% endif %}
+                      <button type="submit" class="btn btn-danger"><span class=" fas fa-times" style="color:white"></span></button>
+                    </form>
+                    <!--สิ้นสุด ไม่ให้ใช้งานห้องประชุม เนื่องจากไม่ว่าง--->
+                  </div>
+                </div>
+              </div>
+            </div>
+      </div>
+      {% endfor %}
+      </tbody>
+      </table>
+    </div>
+  </div>
+    {% endif %}
+  <!-- ============================ bookingroom table end ============================-->
+
+
+
+  <!-- ============================ newuser table ============================-->
+  {% if tnewuser != 0 %}
+  <div class="row" style="background-color: white;padding:10px 0 10px 0;margin-top:50px">
+    <div class="col-md-12">
+      <h3>สมาชิกใหม่</h3>
+      <table id="newuser" class="table table-bordered table-striped">
+        <thead style="background-color:#a29bfe;color:black;text-align:center">
+          <tr>
+            <th scope="col">No.</th>
+            <th scope="col">ชื่อ-นามสกุล</th>
+            <th scope="col">แผนก</th>
+            <th scope="col">E-Mail</th>
+            <th scope="col" style="width: 100px">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for newuser in newuser %}
+          <tr>
+            <td class="noid">{{newuser.0}}</td>
+            <td>{{newuser.1}} {{newuser.2}}</td>
+            <td>{{newuser.7}}</td>
+            <td>{{newuser.6}}</td>
+            <td class="btact">
+              <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#newuser{{newuser.0}}" data-bs-whatever="@getbootstrap"><span class=" fas fa-eye"></span></button>
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#dnewuser{{newuser.0}}" data-bs-whatever="@getbootstrap"><span class=" fa fa-trash-alt"></span></button>
+            </td>
+          </tr>
+          <div class="modal fade" id="newuser{{newuser.0}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">รายละเอียดผู้สมัคร</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('dashboard.Updateuser') }}" method="POST">
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">id:</label>
+                      <input class="form-control" value="{{newuser.0}}" name="id">
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">ชื่อ:</label>
+                      <input type="text" class="form-control" value="{{newuser.1}}" name="name">
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">นามสกุล:</label>
+                      <input type="text" class="form-control" value="{{newuser.2}}" name="lname">
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">E-Mail:</label>
+                      <input type="email" class="form-control" value="{{newuser.6}}" name="email">
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">แผนก:</label>
+                      <input type="text" class="form-control" value="{{newuser.7}}">
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">สิทธิ์การเข้าถึง:</label>
+                      <input type="text" class="form-control" value="{{newuser.9}}" name="possession">
+                    </div>
+                    <div class="form-group" hidden>
+                      <label for="recipient-name" class="col-form-label">level:</label>
+                      <input type="text" class="form-control" value="1" name="status">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-success" data-dismiss="modal"><span class=" fas fa-check" style="color:white"></span></button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="dnewuser{{newuser.0}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">ต้องการลบใช่หรือไม่</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('user.Deleteuser') }}" method="POST">
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">id:</label>
+                      <input class="form-control" value="{{newuser.0}}" name="id">
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">ชื่อ:</label>
+                      <input type="text" class="form-control" value="{{newuser.1}}" name="name">
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">นามสกุล:</label>
+                      <input type="text" class="form-control" value="{{newuser.2}}" name="lname">
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">E-Mail:</label>
+                      <input type="email" class="form-control" value="{{newuser.6}}" name="email">
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">แผนก:</label>
+                      <input type="text" class="form-control" value="{{newuser.7}}">
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">สิทธิ์การเข้าถึง:</label>
+                      <input type="text" class="form-control" value="{{newuser.9}}" name="possession">
+                    </div>
+                    <div class="form-group" hidden>
+                      <label for="recipient-name" class="col-form-label">level:</label>
+                      <input type="text" class="form-control" value="1" name="status">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-danger"><span class=" fa fa-trash-alt" style="color:white"></span></button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

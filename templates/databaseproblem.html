@@ -1,0 +1,175 @@
+{% extends 'main/maindashboard.html' %}
+
+
+{% block menu %}
+{% if session['level'] == 'admin' %}
+<li class="text-center p-20 upgrade-btn">
+  <a type="button" class="btn d-grid btn-danger text-white" data-bs-toggle="modal" data-bs-target="#databaseproblem" data-bs-whatever="@getbootstrap">แจ้งปัญหา</a>
+</li>
+
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="page-breadcrumb bg-white">
+    <div class="row align-items-center">
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h3 class="page-title">Contact List</h3>
+      </div>
+      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="d-md-flex">
+          <ol class="breadcrumb ms-auto">
+            <li><a href="#" class="fw-normal"></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+
+  <div class="container-fluid">
+    <div class="row" style="background-color: white;padding:10px 0 10px 0">
+      <div class="col-md-12">
+        <table id="databaseproblem" class="table table-bordered table-striped">
+          <thead style="background-color:#74b9ff;color:black;text-align:center">
+            <tr>
+              <th>No.</th>
+              <th>ปัญหาที่พบ</th>
+              <th>รูป</th>
+              <th>วันที่แจ้ง</th>
+              <th> ผู้แจ้ง </th>
+              <th> ผู้แก้ </th>
+              <th> ผู้เช็ค </th>
+              {% if session['level'] == 'admin' or 'dev' %}
+              <th> Action </th>
+              {% else %}
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in datas %}
+            <tr>
+              <td>{{ row.0 }}</td>
+              <td>{{ row.1 }}</td>
+              <td>
+                <a type="button" href="#" data-toggle="modal" data-target="#img{{row.0}}" data-whatever="@fat">
+                  <img src="{{ row.2 }}" alt="" style="width:60px;height:auto">
+                </a>
+              </td>
+              <td>{{ row.3 }} </td>
+              <td>{{ row.4 }}</td>
+              {% if row.5 == 0 %}
+              <td>รอการแก้ไข</td>
+              {% else %}
+              <td>{{ row.7 }} ({{ row.6 }})</td>
+              {% endif %}
+              {% if row.5 == 2%}
+              <td>{{ row.8 }} ({{ row.9 }})</td>
+              {% elif row.5 == 1 %}
+              <td>รอการทดสอบ</td>
+              {% else %}
+              <td></td>
+              {% endif %}
+              {% if session['level'] == 'admin' or 'dev' %}
+              {% if row.5 == 0 %}
+              <td align=center>
+                <form class="" action="{{ url_for('databaseproblem.Databaseproblemedit') }}" method="post">
+                  <input type="text" name="id" value="{{row.0}}" hidden>
+                  <input type="text" name="dateedit" value="{{now}}" hidden>
+                  <input type="text" name="status" value="1" hidden>
+                  <input type="text" name="problem" value="{{row.1}}" hidden>
+                  <input type="text" class="form-control" name="edituser" value="{{ session['fname'] }}" hidden>
+                  <button type="submit" class="btn btn-warning" name="button">แก้ไข</button>
+                </form>
+              </td>
+              {% elif session['level'] == 'dev' and row.5 == 1 %}
+              <td align=center>
+                <button class="btn btn-info" type="button" name="button" disabled>wait..</button>
+              </td>
+              {% elif session['level'] == 'dev' and row.5 == 2 %}
+              <td align=center>
+                <button class="btn btn-success" type="button" name="button" disabled>success</button>
+              </td>
+              {% elif session['level'] == 'admin' and row.5 == 1 %}
+              <td align=center>
+                <form class="" action="{{ url_for('databaseproblem.Databaseproblemcheck') }}" method="post">
+                  <input type="text" name="id" value="{{row.0}}" hidden>
+                  <input type="text" name="status" value="2" hidden>
+                  <input type="text" name="datecheck" value="{{now}}" hidden>
+                  <input type="text" class="form-control" name="checkuser" value="{{ session['fname'] }}" hidden>
+                  <button type="submit" class="btn btn-info" name="button">OK</button>
+                </form>
+                <form class="" action="{{ url_for('databaseproblem.Reject') }}" method="post">
+                  <input type="text" name="id" value="{{row.0}}" hidden>
+                  <input type="text" name="status" value="0" hidden>
+                  <button type="submit" class="btn btn-info" name="button">NOT OK</button>
+                </form>
+              </td>
+              {% elif session['level'] == 'admin' and row.5 == 2 %}
+              <td align=center>
+                <button class="btn btn-success" type="button" name="button" disabled>success</button>
+              </td>
+              {% endif %}
+              {% else %}
+              {% endif %}
+              <!--โมเดลโชว์รูปอาการเสีย-->
+              <div class="modal fade" id="img{{row.0}}" tabindex="-1" role="dialog" aria-labelledby="addjobLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <img border="0" src="{{ row.2 }}" width="100%" height="100%" onclick="zoomToggle('200%','200%','200%','200%',this);" style="padding:auto;justify-content:center">
+                  </div>
+                </div>
+              </div>
+              <!--end-->
+              {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--add contact-->
+<div class="modal fade" id="databaseproblem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelreport" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 style="padding:0 0 0 35%;" class="modal-title" id="exampleModalLabelreport">แจ้งปัญหา</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url_for('databaseproblem.Adddatabaseproblem') }}" method="POST" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">ปัญหาที่พบ:</label>
+            <input type="text" class="form-control" name="problem">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">วันที่แจ้ง:</label>
+            <input type="datetime-local" class="form-control" name="dateadd" required>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">ผู้แจ้ง:</label>
+            <input type="text" class="form-control" name="user" value="{{ session['fname'] }} {{ session['lname'] }}">
+          </div>
+      </div>
+      <div class="form-group" style="width:97%;margin-left:5px">
+        <label for="recipient-name" class="col-form-label">รูปภาพ(ถ้ามี) :</label>
+        <input type="file" class="form-control" name="file" accept="image/x-png,image/gif,image/jpeg" onchange="readURL(this);">
+        <img id="blah" src="" alt="" class="img-thumbnail" />
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">add</button>
+      </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+<!-- end addcontact-->
+
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends 'main/maindashboard.html' %}
+
+{% block menu %}
+<li class="text-center p-20 upgrade-btn">
+  <a type="button" class="btn d-grid btn-danger text-white" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    แจ้งซ่อม</a>
+</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="page-breadcrumb bg-white">
+    <div class="row align-items-center">
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h3 class="page-title">รายการแจ้งซ่อม</h3>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row" style="background-color: white;padding:10px 0 10px 0">
+      <div class="col-md-12">
+        <table id="helpdesk" class="table table-bordered table-striped">
+          <thead style="background-color:#74b9ff;color:black;text-align:center">
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">ชื่อ-นามสกุล</th>
+              <th scope="col">แผนก</th>
+              <th scope="col">อุปกรณ์</th>
+              <th scope="col">ทะเบียน</th>
+              <th scope="col">วันที่แจ้ง</th>
+              <th scope="col">อาการเสีย</th>
+              <th scope="col">รูปประกอบ</th>
+              <th scope="col">สถานะ</th>
+              <th scope="col">ผู้ช่อม</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in datas %}
+            <tr>
+              <td class="noid">{{ row.0 }}</td>
+              <td>{{ row.1 }} {{ row.2 }}</td>
+              <td>{{ row.3 }}</td>
+              <td>{{ row.5 }}</td>
+              <td>{{ row.6 }}</td>
+              <td>{{ row.7 }}</td>
+              <td>{{ row.8 }}</td>
+              <td style="width:100px;height:10px"><a href="{{ row.12 }}" target="_blank"> <img src="{{ row.12 }}" style="width:100%;object-fit:cover"></td></a>
+              {% if row.13 == 2 %}
+              <td>{{ row.9 }} <span class="badge badge-warning" style="background-color:#fffa65;color:#4b4b4b;border-radius:10px" >Warning</span></td>
+              {% elif row.13 == 3 %}
+              <td>{{ row.9 }} <span class="badge badge-info" style="background-color:#32ff7e;color:#4b4b4b;border-radius:10px">Success</span></td>
+              {% elif row.13 == 0 %}
+              <td>{{ row.9 }}</td>
+              {% endif %}
+              {% if row.14 == "" %}
+              <td></td>
+              {% else %}
+              <td>{{ row.10 }} ({{ row.14 }})</td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal แจ้งซ่อม-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">แจ้งซ่อม</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url_for('helpdesk.addrepair') }}" method="POST" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">ชื่อ:</label>
+            <input type="text" class="form-control" name="fname" value="{{ session['fname'] }}" required>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">นามสกุล:</label>
+            <input type="text" class="form-control" name="lname" value="{{ session['lname'] }}" required>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">แผนก:</label>
+            <div class="col-md6">
+              <select class="custom-select" name="depart" style="width:100%;border:0.5px solid rgba(0 ,0 ,0 ,0.1); border-radius:5px;height:2rem;padding:6px 28px 6px 12px" required>
+                <option value="{{ session['department'] }}" name="department">{{ session['department'] }}</option>
+                {% for dep in dep %}
+                <option value="Accounting" name="depart">{{dep.1}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">เบอร์โต๊ะ:</label>
+            <input type="text" pattern="[0-9\s]*" title="กรุณาไส่เบอร์โทรภายใน" class="form-control" name="telin" value="" required>
+          </div>
+          <div class="form-group" hidden>
+            <label for="recipient-name" class="col-form-label">email :</label>
+            <input type="email" class="form-control" name="email" value="{{ session['email'] }}" required>
+          </div>
+
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">อุปกรณ์:</label>
+            <div class="col-md6">
+              <select class="custom-select" name="goods" style="width:100%;border:0.5px solid rgba(0 ,0 ,0 ,0.1); border-radius:5px;height:2rem;padding:6px 28px 6px 12px" required>
+                <option value="">--กรุณาระบุอุปกรณ์--</option>
+                <option value="pc">PC</option>
+                <option value="notebook">Notebook</option>
+                <option value="phone">Phone</option>
+                <option value="network">Network</option>
+                <option value="Printer">Printer/Scan</option>
+                <option value="other">อื่นๆ/โปรดระบุ</option>
+              </select>
+              <div class="form-group">
+                <lable for="goodsohter"></lable>
+                <input id="show" type="text" class="form-control" name="goodsohter" value=" " placeholder="กรุณาไส่ประเภทอุปกรณ์" style="display:none" required>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">รหัสทะเบียนอุปกรณ์ :</label>
+            <input type="text" class="form-control" name="code" placeholder="ถ้าไม่ทราบให้ไส่ -" required>
+          </div>
+          <div class="form-group">
+            <lable id=details for="deteil">อาการเสีย :</lable><br>
+            <textarea id="deteil" type="deteil" class="form-control" name="detail" rows="2" cols="63" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">รูปภาพ(ถ้ามี) :</label>
+            <input type="file" class="form-control" name="file" accept="image/x-png,image/gif,image/jpeg" onchange="readURL(this);">
+            <img id="blah" src="" alt="" class="img-thumbnail" />
+          </div>
+          <div class="form-group" hidden>
+            <label for="recipient-name" class="col-form-label">jobstatus :</label>
+            <input type="text" class="form-control" name="jobstatus" value="0" required>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
+
+{% endblock %}

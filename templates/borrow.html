@@ -1,0 +1,103 @@
+{% extends 'main/maindashboard.html' %}
+
+
+{% block content %}
+
+<div class="page-wrapper">
+  <div class="page-breadcrumb bg-white">
+    <div class="row align-items-center">
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h3 class="page-title">รายการเบิก-ยืม อุปกรณ์ IT</h3>
+      </div>
+      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="d-md-flex">
+          <ol class="breadcrumb ms-auto">
+            <li></li>
+          </ol>
+          <a href="/propertyregister" class="btn btn-info  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">รายการทรัพย์สิน</a>
+          <a href="/borrowlist" class="btn btn-success d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">เบิก-ยืม</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="col-md-12" style="background-color: white;padding:10px">
+      <table id="tableborrow" class="table table-bordered table-striped">
+        <thead>
+          <tr style="background:#b8e994;">
+            <th width="5">No.</th>
+            <th scope="col">ชื่อ</th>
+            <th scope="col">แผนก</th>
+            <th scope="col">ประเภท</th>
+            <th scope="col">ยี่ห้อ</th>
+            <th scope="col">S/N</th>
+            <th scope="col">IT-Code</th>
+            <th scope="col">วันที่เบิก</th>
+            <th scope="col">การจัดการ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for borrowlist in borrowlist %}
+          <tr>
+            <td style="text-align:center">{{ borrowlist.0 }}</td>
+            <td>{{ borrowlist.1 }}</td>
+            <td>{{ borrowlist.2 }}</td>
+            <td>{{ borrowlist.3 }}</td>
+            <td>{{ borrowlist.4 }}</td>
+            <td>{{ borrowlist.5 }}</td>
+            <td>{{ borrowlist.6 }}</td>
+            <td>{{ borrowlist.9 }}</td>
+            <td>
+              <form class="" action="{{url_for('propertyregister.Borrowing')}}" method="post">
+                <input type="text" name="id" value="{{ borrowlist.0 }}" hidden>
+                <button type="submit" class="btn btn-primary" style="float:left;margin-right:10px;">
+                  <i class="fa fa-print"></i>
+                </button>
+              </form>
+              {% if borrowlist.11 == 1 %}
+              <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#returngoods{{borrowlist.0}}" data-bs-whatever="@fat"><i class="fas fa-undo"></i></button>
+
+              <div class="modal fade" id="returngoods{{borrowlist.0}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form class="" action="{{url_for('propertyregister.Return')}}" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                          <input type="text" name="id" value="{{ borrowlist.0 }}" >
+                          <input type="text" name="idgoods" value="{{ borrowlist.12 }}">
+                          <input type="text" name="datereturn" value="{{now}}" hidden>
+                          <input type="text" name="returnborrow" value="0" hidden>
+                          <input type="text" name="returngoods" value="1" hidden>
+                          <input type="text" name="itreturn" value="{{ session['fname'] }}" hidden>
+                          <div class="form-group">
+                            <label for="recipient-name" class="col-form-label"> ลายเซ็น :</label>
+                            <input type="file" class="form-control" name="file" accept="image/x-png,image/gif,image/jpeg,application/pdf" placeholder="Required" onchange="readURL(this);" required>
+                            <img id="blah" src="" alt="" class="img-thumbnail" />
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <a type="button" class="btn btn-secondary" href="/signature" target="_blank">สร้างลายเซ็น</a>
+                      <button type="submit" class="btn btn-primary">Return</button>
+                    </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+
+  {% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'main/mainlanding.html' %}
+
+{% block content %}
+
+<style>
+  .card {
+    margin-top: 10%;
+    -webkit-box-shadow: 0 30px 50px rgba(0, 0, 0, .2);
+    box-shadow: 0 30px 50px rgba(0, 0, 0, .2)
+  }
+
+  .card p {
+    font-size: 1.3rem;
+  }
+
+  .card-img img {
+    width: 100%;
+    margin-bottom: 5%
+  }
+
+  @media screen and (max-width:992px) {
+    .card {
+      margin-top: 20%;
+    }
+
+  }
+
+  @media screen and (max-width:769px) {
+    .card {
+      margin-top: 27% !important;
+    }
+  }
+
+  @media screen and (max-width:520px) {
+    .card {
+      margin-top: 30% !important;
+    }
+  }
+
+  @media screen and (max-width:480px) {
+    .card {
+      margin-top: 35% !important;
+    }
+  }
+</style>
+
+<div class="card">
+  <div class="card-body">
+    <div class="card-img">
+      <img src="static/imglanding/0002/20474_220509175518QH.jpg">
+    </div>
+
+    <div class="card-title">
+      <h2>พบเทคนิคโจมตีแบบใหม่ ซ่อนมัลแวร์ไว้ในไฟล์ Windows Event Logs</h2>
+    </div>
+    <p>
+      Denis Legezo นักวิจัยด้านความปลอดภัยจากบริษัท Kaspersky ได้เผยแพร่งานวิจัยการค้นพบวิธีการโจมตีของแฮกเกอร์แบบใหม่ที่ไม่เคยถูกพบเจอมาก่อน โดยเป็นมัลแวร์แบบไร้ไฟล์ (Fileless) ที่ซ่อนตัวอยู่ในไฟล์ Windows event logs อยู่ในรูปแบบของ Shellcode
+      คาดว่าการโจมตีได้เริ่มต้นขึ้นตั้งแต่ช่วงเดือนกันยายน ปี ค.ศ. 2022 (พ.ศ. 2565)</p>
+    <br>
+    <p>มัลแวร์ตัวนี้จะโจมตีด้วยการหลอกล่อให้เหยื่อดาวน์โหลดไฟล์ .RAR ที่บรรจุมัลแวร์ Cobalt Stike module และ Silent Break เอาไว้ เมื่อเหยื่อหลงเชื่อดาวน์โหลดไฟล์ดังกล่าวไปแตกไฟล์มันจะทำการแทรกโค้ดเข้าไปใน Windows system processes
+      หรือแอปพลิเคชันที่เชื่อถือได้ (Trusted applications) และใช้เทคนิคหลบการตรวจสอบด้วยการพรางตัวให้ทางระบบคิดว่าโค้ดดังกล่าวมันเป็นส่วนหนึ่งของการประมวลผลที่จำเป็นต่อการทำงานของแอปพลิเคชัน</p>
+    <img src="static/imglanding/0002/20474_22051014021021_14.png" alt="" style="width: 100%">
+    <br><br>
+    <p>ซึ่งหนึ่งในกุญแจสำคัญที่ทำให้เทคนิคดังกล่าวดำเนินการได้สำเร็จ ก็มาจากการที่แฮกเกอร์มีการเข้ารหัส Shellcode ขนาด 8 KB ที่ถูกเพิ่มเข้าไปในไฟล์ Windows event logs มันจะช่วยปูทางให้มัลแวร์สามารถดำเนินการโจมตีขั้นถัดไปได้
+      ซึ่งวิธีนี้เป็นเทคนิคใหม่ที่ไม่เคยถูกค้นพบมาก่อน</p><br>
+    <img src="static/imglanding/0002/20474_2205101340047F_14.jpg" alt="" style="width: 100%">
+    <p style="text-align:center;font-size:10px">ภาพจาก https://thehackernews.com/2022/05/this-new-fileless-malware-hides.html</p><br>
+    <p>Payload สุดท้าย คือกองกำลังโทรจัน (Trojans) ที่จะสื่อสารผ่านทาง HTTP ด้วยการเข้ารหัส และถอดรหัสผ่าน RC4 ในชื่อ "pipes" ซึ่งมันจะอนุญาตให้รันคำสั่งแบบ Arbitrary commands เพื่อดาวน์โหลดไฟล์จาก URL ที่กำหนด, ยกระดับสิทธิ์ในระบบ และจับภาพหน้าจอได้
+    </p><br>
+    <p>อีกเทคนิคหนึ่งที่แฮกเกอร์ใช้หลบการตรวจจับ คือการนำข้อมูลที่เก็บได้จากการโจมตีในระยะแรก มาพัฒนาเซิร์ฟเวอร์ปลอมที่อ้างอิงจากแอปพลิเคชันที่เหยื่อมักใช้งานเป็นประจำ เพื่อเพิ่มความเนียนในการโจมตี</p><br>
+    <p>ทาง Denis Legezo ได้กล่าวว่า "แฮกเกอร์ที่อยู่เบื้องหลังแผนการโจมตีนี้ถือว่าฉลาดเป็นกรดเลยทีเดียว โค้ดที่เขาใช้ก็มีเอกลักษณ์เฉพาะตัว ไม่เหมือนกับมัลแวร์ที่เคยถูกค้นพบมาก่อน"</p>
+
+  </div>
+</div>
+{% endblock %}

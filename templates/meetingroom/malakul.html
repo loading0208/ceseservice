@@ -1,0 +1,186 @@
+{% extends 'main/maindashboard.html' %}
+
+
+{% block menu %}
+<li class="text-center p-20 upgrade-btn">
+  <a type="button" class="btn d-grid btn-danger text-white" data-bs-toggle="modal" data-bs-target="#addbooking" data-bs-whatever="@getbootstrap">จองห้องประชุม</a>
+</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="page-breadcrumb bg-white">
+    <div class="row align-items-center">
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h3 class="page-title">รายการจองห้องประชุม</h3>
+      </div>
+      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="d-md-flex">
+          <ol class="breadcrumb ms-auto">
+            <li><a href="#" class="fw-normal"></a></li>
+          </ol>
+          <a href="/malakul" type="button" class="btn btn-info  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white" style="border-radius:5px;box-shadow:5px 5px 5px  #888888">Malakul</a>
+          <a href="/chadjew" type="button" class="btn btn-primary  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">chadjew</a>
+          <a href="/thanasriporn" type="button" class="btn btn-secondary  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">Thanasriporn</a>
+        </div>
+      </div>
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+
+  <div class="container-fluid">
+    <div class="row" style="background-color: white;padding:10px 0 10px 0">
+      <div class="col-md-12">
+        <h3>Malakul Room</h3>
+        <table id="contact" class="table table-bordered table-striped">
+          <thead class="bg-info" style="color:black;text-align:center">
+            <tr>
+              <th class="text-white" scope="col">No.</th>
+              <th class="text-white" scope="col">ผู้จอง</th>
+              <th class="text-white" scope="col">แผนก</th>
+              <th class="text-white" scope="col">วันที่ใช้</th>
+              <th class="text-white" scope="col">ถึงวันที่</th>
+              <th class="text-white" scope="col">หมายเหตุ</th>
+              <th class="text-white" scope="col">สถานะ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for malakul in malakul %}
+            <tr>
+              <td style="text-align:center">{{ malakul.0 }}</td>
+              <td>{{ malakul.1 }} {{ malakul.2 }}</td>
+              <td>{{ malakul.3 }}</td>
+              <td>{{ malakul.6 }}</td>
+              <td>{{ malakul.7 }}</td>
+              <td>{{ malakul.8 }}</td>
+              {% if malakul.9 == 1 and malakul.1 == session['fname'] %}
+              <td>
+                <div class="bt-act" style="display:flex;align-items:center">
+                  <div class="" style="margin-right:10px">
+                    ได้รับการอนุมัติให้ใช้ห้องแล้วแล้วโดย {{ malakul.11 }}
+                  </div>
+                  <div class="">
+                    <form class="" action="{{ url_for('booking.Closeroom') }}" method="post">
+                      <input type="text" name="id" value="{{malakul.0}}" hidden>
+                      <input type="text" name="room" value="Malakul" hidden>
+                      <input type="text" name="status" value="2" hidden>
+                      <button type="submit" class="btn btn-danger" name="button" style="border-radius:5px;box-shadow:3px 3px 3px  #888888">Close</button>
+                    </form>
+                  </div>
+                </div>
+              </td>
+              {% elif malakul.9 == 0 and malakul.1 == session['fname'] %}
+              <td>
+                <form class="" action="{{ url_for('booking.Deletebooking') }}" method="post">
+                  <input type="text" name="id" value="{{malakul.0}}" hidden>
+                  <input type="text" name="room" value="Malakul" hidden>
+                  <button type="submit" class="btn btn-warning" name="button" style="border-radius:5px;box-shadow:3px 3px 3px  #888888">Cancel</button>
+                </form>
+              </td>
+              {% elif malakul.9 == 1 %}
+              <td>
+                ได้รับการอนุมัติให้ใช้ห้องแล้วแล้วโดย {{malakul.11}}
+              </td>
+              {% elif malakul.9 == 2 %}
+              <td>
+                Close ({{malakul.10}})
+              </td>
+              {% elif malakul.9 == 3 %}
+              <td>
+                ยกเลิกโดยเจ้าหน้าที่เนื่องจากห้องไม่ว่าง
+              </td>
+              {% elif malakul.9 == 4 %}
+              <td>
+                ตรวจสอบโดย {{malakul.11}}
+              </td>
+              {% else %}
+              <td>
+                รอเจ้าหน้าที่อนุมัติ
+              </td>
+              {% endif %}
+
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal ระบบจองห้องประชุม-->
+<div class="modal fade" id="addbooking" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">ระบบจองห้องประชุม</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url_for('booking.addbooking') }}" method="POST">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">ชื่อ:</label>
+            <input type="text" class="form-control" name="fname" value="{{ session['fname'] }}" required>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">นามสกุล:</label>
+            <input type="text" class="form-control" name="lname" value="{{ session['lname'] }}" required>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">แผนก:</label>
+            <div class="col-md6">
+              <select class="custom-select" name="depart" style="width:100%;border:0.5px solid rgba(0 ,0 ,0 ,0.1); border-radius:5px;height:2rem;padding:6px 28px 6px 12px" required>
+                <option value="{{ session['department'] }}" name="department">{{ session['department'] }}</option>
+                {% for dep in dep %}
+                <option value="Accounting" name="depart">{{dep.1}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group" hidden>
+              <label for="recipient-name" class="col-form-label">status:</label>
+              <input type="text" class="form-control" name="status" value="0">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">E-Mail:</label>
+            <input type="email" class="form-control" name="email" value="{{ session['email'] }}" required>
+          </div>
+          <div class="form-group" hidden>
+            <label for="recipient-name" class="col-form-label">Room:</label>
+            <select class="custom-select" name="room" required>
+              <option value="Malakul" name="room">Malakul</option>
+            </select>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">วันและเวลาที่ใช้ :</label>
+                  <input type="datetime-local" class="form-control" id="datetime" name="date" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">วันและเวลาที่เลิกใช้ :</label>
+                  <input type="datetime-local" class="form-control" id="datetime" name="dateend" required>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">รายละเอียดหรือความต้องการเพื่มเติม:</label>
+            <hr>
+            <textarea class="form-control" name="other" rows="4" cols="52"></textarea>
+          </div>
+      </div>
+      <div class="form-group" style="margin:0 0 0 6%;font-weight:bold">
+        <h5>*กรุณาตรวจสอบอุปกรณ์ทั้งก่อนและหลังการใช้งานทุกครั้ง</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success"><span class=" fas fa-check" style="color:white"></span></button>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
+{% endblock %}

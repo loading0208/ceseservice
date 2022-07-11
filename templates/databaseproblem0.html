@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="static/img/Logo.png">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>IT Support | Dashboard</title>
+
+  <!-- Custom fonts for this template-->
+  <link rel="stylesheet" href="static/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" href="static/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+  <link href="static/sb/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Mali&display=swap" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="static/sb/css/sb-admin-2.min.css" rel="stylesheet">
+  <style media="screen">
+    body {
+      font-family: 'Mali', cursive;
+    }
+  </style>
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      {% if session['level'] == 'admin' %}
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/home">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="far fa-dizzy"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">CES E-SERVICE</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+
+      <li class="nav-item">
+        <a class="nav-link" href="/dashboard">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+      {% else %}
+      {% endif %}
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item active">
+        <a class="nav-link" href="/databaseproblem">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Databaseproblem</span></a>
+      </li>
+      <!-- Divider -->
+
+      <!-- Heading -->
+      <hr class="sidebar-divider d-none d-md-block">
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown no-arrow d-sm-none">
+              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                <form class="form-inline mr-auto w-100 navbar-search">
+                  <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+            <div class="topbar-divider d-none d-sm-block"></div>
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ session['fname'] }}</span>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Profile
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logoff">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <div class="container-fluid">
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">แจ้งปัญหา Database Systems</h1>
+            <a type="button" href="#" data-toggle="modal" data-target="#databaseproblem" data-whatever="@fat" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">แจ้งปัญหา</a>
+          </div>
+          <!-- Content Row -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="statushow" style="display:flex;justify-content:left;">
+                <h5>รายการแจ้ง</h5>
+                <h5 style="margin-left:10px;color:#f0c435">({{status}} รายการรอการแก้ไข)</h5>
+
+              </div>
+              <div class="box" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;padding: 1% 2% 2% 2%">
+                <table id="example4" class="table table-bordered table-striped">
+                  <thead style="background-color:lightblue">
+                    <tr align=center>
+                      <th>No.</th>
+                      <th>ปัญหาที่พบ</th>
+                      <th>รูป</th>
+                      <th>วันที่แจ้ง</th>
+                      <th> ผู้แจ้ง </th>
+                      <th> ผู้แก้ </th>
+                      <th> ผู้เช็ค </th>
+                      {% if session['level'] == 'admin' or 'dev' %}
+                      <th> Action </th>
+                      {% else %}
+                      {% endif %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in datas %}
+                    <tr>
+                      <td>{{ row.0 }}</td>
+                      <td>{{ row.1 }}</td>
+                      <td>
+                        <a type="button" href="#" data-toggle="modal" data-target="#img{{row.0}}" data-whatever="@fat">
+                          <img src="{{ row.2 }}" alt="" style="width:60px;height:auto">
+                        </a>
+                      </td>
+                      <td>{{ row.3 }} </td>
+                      <td>{{ row.4 }}</td>
+                      {% if row.5 == 0 %}
+                      <td>รอการแก้ไข</td>
+                      {% else %}
+                      <td>{{ row.7 }} ({{ row.6 }})</td>
+                      {% endif %}
+                      {% if row.5 == 2%}
+                      <td>{{ row.8 }} ({{ row.9 }})</td>
+                      {% elif row.5 == 1 %}
+                      <td>รอการทดสอบ</td>
+                      {% else %}
+                      <td></td>
+                      {% endif %}
+                      {% if session['level'] == 'admin' or 'dev' %}
+                      {% if row.5 == 0 %}
+                      <td align=center>
+                        <form class="" action="{{ url_for('databaseproblem.Databaseproblemedit') }}" method="post">
+                          <input type="text" name="id" value="{{row.0}}" hidden>
+                          <input type="text" name="dateedit" value="{{now}}" hidden>
+                          <input type="text" name="status" value="1" hidden>
+                          <input type="text" name="problem" value="{{row.1}}" hidden>
+                          <input type="text" class="form-control" name="edituser" value="{{ session['fname'] }}" hidden>
+                          <button type="submit" class="btn btn-warning" name="button">แก้ไข</button>
+                        </form>
+                      </td>
+                      {% elif session['level'] == 'dev' and row.5 == 1 %}
+                      <td align=center>
+                        <button class="btn btn-info" type="button" name="button" disabled>wait..</button>
+                      </td>
+                      {% elif session['level'] == 'dev' and row.5 == 2 %}
+                      <td align=center>
+                        <button class="btn btn-success" type="button" name="button" disabled>success</button>
+                      </td>
+                      {% elif session['level'] == 'admin' and row.5 == 1 %}
+                      <td align=center>
+                        <form class="" action="{{ url_for('databaseproblem.Databaseproblemcheck') }}" method="post">
+                          <input type="text" name="id" value="{{row.0}}" hidden>
+                          <input type="text" name="status" value="2" hidden>
+                          <input type="text" name="datecheck" value="{{now}}" hidden>
+                          <input type="text" class="form-control" name="checkuser" value="{{ session['fname'] }}" hidden>
+                          <button type="submit" class="btn btn-info" name="button">OK</button>
+                        </form>
+                        <form class="" action="{{ url_for('databaseproblem.Reject') }}" method="post">
+                          <input type="text" name="id" value="{{row.0}}" hidden>
+                          <input type="text" name="status" value="0" hidden>
+                          <button type="submit" class="btn btn-info" name="button">NOT OK</button>
+                        </form>
+                      </td>
+                      {% elif session['level'] == 'admin' and row.5 == 2 %}
+                      <td align=center>
+                        <button class="btn btn-success" type="button" name="button" disabled>success</button>
+                      </td>
+                      {% endif %}
+                      {% else %}
+                      {% endif %}
+                      <!--โมเดลโชว์รูปอาการเสีย-->
+                      <div class="modal fade" id="img{{row.0}}" tabindex="-1" role="dialog" aria-labelledby="addjobLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <img border="0" src="{{ row.2 }}" width="100%" height="100%" onclick="zoomToggle('200%','200%','200%','200%',this);" style="padding:auto;justify-content:center">
+                          </div>
+                        </div>
+                      </div>
+                      <!--end-->
+                      {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="databaseproblem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelreport" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 style="padding:0 0 0 35%;" class="modal-title" id="exampleModalLabelreport">แจ้งปัญหา</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="{{ url_for('databaseproblem.Adddatabaseproblem') }}" method="POST" enctype="multipart/form-data">
+                  <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">ปัญหาที่พบ:</label>
+                    <input type="text" class="form-control" name="problem">
+                  </div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">วันที่แจ้ง:</label>
+                    <input type="datetime-local" class="form-control" name="dateadd" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">ผู้แจ้ง:</label>
+                    <input type="text" class="form-control" name="user" value="{{ session['fname'] }} {{ session['lname'] }}">
+                  </div>
+              </div>
+              <div class="form-group" style="width:97%;margin-left:5px">
+                <label for="recipient-name" class="col-form-label">รูปภาพ(ถ้ามี) :</label>
+                <input type="file" class="form-control" name="file" accept="image/x-png,image/gif,image/jpeg" onchange="readURL(this);">
+                <img id="blah" src="" alt="" class="img-thumbnail" />
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">add</button>
+              </div>
+            </div>
+          </div>
+          </form>
+        </div>
+
+      </div>
+
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; 2020 IT Support CES</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Page Wrapper -->
+
+      <!-- Scroll to Top Button-->
+      <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+      </a>
+    </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="static/sb/vendor/jquery/jquery.min.js"></script>
+    <script src="static/sb/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="static/sb/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="static/sb/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="static/sb/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="static/sb/js/demo/chart-area-demo.js"></script>
+    <script src="static/sb/js/demo/chart-pie-demo.js"></script>
+    <script src="static/plugins/datatables/jquery.dataTables.min.js"></script>
+
+    <script src="static/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="static/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="static/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+    <script>
+      $(function() {
+        $("#example3").DataTable({
+          "responsive": true,
+          "autoWidth": false,
+        });
+        $('#example4').DataTable({
+          "paging": true,
+          "lengthChange": false,
+          "searching": false,
+          "ordering": false,
+          "info": true,
+          "autoWidth": false,
+          "responsive": true,
+        });
+      });
+    </script>
+
+    <!--โชว์รูป-->
+    <script>
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            $('#blah')
+              .attr('src', e.target.result)
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+    </script>
+    <!--end-->
+    <script>
+      var nW, nH, oH, oW;
+
+      function zoomToggle(iWideSmall, iHighSmall, iWideLarge, iHighLarge, whichImage) {
+        oW = whichImage.style.width;
+        oH = whichImage.style.height;
+        if ((oW == iWideLarge) || (oH == iHighLarge)) {
+          nW = iWideSmall;
+          nH = iHighSmall;
+        } else {
+          nW = iWideLarge;
+          nH = iHighLarge;
+        }
+        whichImage.style.width = nW;
+        whichImage.style.height = nH;
+      }
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+{% extends 'main/maindashboard.html' %}
+
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="page-breadcrumb bg-white">
+    <div class="row align-items-center">
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">เลือกห้องประชุมที่ต้องการ</h4>
+      </div>
+      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="d-md-flex">
+          <ol class="breadcrumb ms-auto">
+            <li></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row justify-content-center room">
+      <div class="col-lg-4 col-md-12" style="margin-bottom:20px">
+        <div class="white-box analytics-info bg-info" style="height:100%;">
+          <a href="/malakul" style="justify-content:center;display:flex;align-items:center">
+            <h1 style="color:white;font-size:2rem;margin-top:10%" class="box-title">Malakul</h1>
+          </a>
+          <p style="margin-top:50px;font-size:1.5rem;color:#fff;text-align:right">จำนวนคิวที่รอ: {{queuemalakul}}</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-12" style="margin-bottom:20px">
+        <div class="white-box analytics-info bg-primary" style="height:100%">
+          <a href="/chadjew" style="justify-content:center;display:flex;align-items:center">
+            <h3 style="color:white;font-size:2rem;margin-top:10%" class="box-title">Chadjew</h3>
+          </a>
+          <p style="margin-top:50px;font-size:1.5rem;color:#fff;text-align:right">จำนวนคิวที่รอ: {{queuechadjew}}</p>
+
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-12" style="margin-bottom:20px">
+        <div class="white-box analytics-info bg-secondary" style="height:100%">
+          <a href="/thanasriporn" style="justify-content:center;display:flex;align-items:center">
+            <h3 style="color:white;font-size:2rem;margin-top:10%" class="box-title">Thanasriporn</h3>
+          </a>
+          <p style="margin-top:50px;font-size:1.5rem;color:#fff;text-align:right">จำนวนคิวที่รอ: {{queuethanasriporn}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}
