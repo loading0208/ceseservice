@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Mali:wght@200;300;400&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Mali', cursive;
+}
+
+.background-body{
+  background-image: linear-gradient(30deg, rgba(85, 239, 196, 0.3), #dcdde1) !important;
+  width: 100% ;
+  height: 100vh;
+}
